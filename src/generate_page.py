@@ -14,13 +14,11 @@ def generate_page(from_path, template_path, dest_path, base_path):
     content = markdown_to_html_node(markdown).to_html()
     title = extract_title(markdown)
 
+    # Inject base path into template and asset URLs
     html = template.replace("{{ Title }}", title).replace("{{ Content }}", content)
-
-    # Strip leading slash before injecting base path
     html = html.replace('href="/', f'href="{base_path}/')
     html = html.replace('src="/', f'src="{base_path}/')
 
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
-
     with open(dest_path, "w") as f:
         f.write(html)
