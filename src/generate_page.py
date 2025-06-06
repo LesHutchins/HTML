@@ -16,9 +16,12 @@ def generate_page(from_path, template_path, dest_path, base_path):
 
     html = template.replace("{{ Title }}", title).replace("{{ Content }}", content)
 
-    # Inject base path for GitHub Pages
+    # Replace base path placeholder and fix resource paths for GitHub Pages
+    html = html.replace("{{ BasePath }}", base_path)
     html = html.replace('href="/', f'href="{base_path}/')
+    html = html.replace("href='/", f"href='{base_path}/")
     html = html.replace('src="/', f'src="{base_path}/')
+    html = html.replace("src='/", f"src='{base_path}/")
 
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
 
