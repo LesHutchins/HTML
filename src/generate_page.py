@@ -1,12 +1,10 @@
-# src/generate_page.py
-
 import os
 from markdown_converter import markdown_to_html_node
 from extractor import extract_title
 
-def generate_page(from_path, template_path, dest_path, base_path="/"):
+def generate_page(from_path, template_path, dest_path, base_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
-    
+
     with open(from_path, "r") as f:
         markdown = f.read()
 
@@ -18,8 +16,7 @@ def generate_page(from_path, template_path, dest_path, base_path="/"):
 
     html = template.replace("{{ Title }}", title).replace("{{ Content }}", content)
 
-    # Sanitize and apply the base path
-    base_path = base_path.rstrip("/")
+    # Inject base path for GitHub Pages
     html = html.replace('href="/', f'href="{base_path}/')
     html = html.replace('src="/', f'src="{base_path}/')
 
