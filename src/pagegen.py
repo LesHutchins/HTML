@@ -10,13 +10,11 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, bas
                 continue
 
             src_md_path = os.path.join(root, file)
-
-            # Skip root index.md — handled manually in main.py
-            if os.path.abspath(src_md_path) == os.path.abspath("content/index.md"):
-                continue
-
             rel_path = os.path.relpath(src_md_path, dir_path_content)
             rel_path_no_ext = os.path.splitext(rel_path)[0]
+
+            if rel_path_no_ext.endswith("/index"):
+                rel_path_no_ext = rel_path_no_ext[:-len("/index")]
 
             dest_dir = os.path.join(dest_dir_path, rel_path_no_ext)
             dest_html_path = os.path.join(dest_dir, "index.html")
