@@ -1,0 +1,30 @@
+from textnode import TextNode, TextType
+from copier import copy_static_to_public
+
+def main():
+    node = TextNode("This is some anchor text", TextType.LINK, "https://www.boot.dev")
+    print(node)
+
+main()
+from copier import copy_static_to_public
+
+def main():
+    # Step 1: Copy static files
+    copy_static_to_public()
+
+    # Step 2: Run your other generation logic (if any)
+    print("Site build complete!")
+
+if __name__ == "__main__":
+    main()
+from copier import copy_static_to_public
+
+def main():
+    # Step 1: Copy static files
+    copy_static_to_public()
+
+    # Step 2: Run your other generation logic (if any)
+    print("Site build complete!")
+
+if __name__ == "__main__":
+    main()
