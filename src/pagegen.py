@@ -3,6 +3,8 @@ from markdown_converter import markdown_to_html_node
 from extractor import extract_title
 
 def generate_page(from_path, template_path, dest_path, base_path="/"):
+    print(f"Generating page from {from_path} to {dest_path} using {template_path} with base path {base_path}")
+
     with open(from_path, "r") as f:
         markdown = f.read()
 
@@ -12,17 +14,17 @@ def generate_page(from_path, template_path, dest_path, base_path="/"):
     content = markdown_to_html_node(markdown).to_html()
     title = extract_title(markdown)
 
-    full_html = (
-        template
-        .replace("{{ Title }}", title)
-        .replace("{{ Content }}", content)
-        .replace('href="/', f'href="{base_path}')
-        .replace('src="/', f'src="{base_path}')
-    )
+    html = template.replace("{{ Title }}", title).replace("{{ Content }}", content)
+
+    # Apply base path to relative URLs
+    base_path = base_path.rstrip("/")  # prevent trailing slashes
+    html = html.replace('href="/', f'href="{base_path}/')
+    html = html.replace('src="/', f'src="{base_path}/')
 
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+
     with open(dest_path, "w") as f:
-        f.write(full_html)
+        f.write(html)
 
 def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, base_path="/"):
     for root, dirs, files in os.walk(dir_path_content):
@@ -34,11 +36,8 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, bas
             rel_path = os.path.relpath(src_md_path, dir_path_content)
             rel_path_no_ext = os.path.splitext(rel_path)[0]
 
-            # Handle special case for root index.md
-            if rel_path_no_ext == "index":
-                dest_html_path = os.path.join(dest_dir_path, "index.html")
-            else:
-                dest_dir = os.path.join(dest_dir_path, rel_path_no_ext)
-                dest_html_path = os.path.join(dest_dir, "index.html")
+            dest_dir = os.path.join(dest_dir_path, rel_path_no_ext)
+            dest_html_path = os.path.join(dest_dir, "index.html")
 
+            os.makedirs(dest_dir, exist_ok=True)
             generate_page(src_md_path, template_path, dest_html_path, base_path)
