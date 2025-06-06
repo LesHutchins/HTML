@@ -13,6 +13,10 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, bas
             rel_path = os.path.relpath(src_md_path, dir_path_content)
             rel_path_no_ext = os.path.splitext(rel_path)[0]
 
+            # Skip regenerating the homepage
+            if rel_path_no_ext == "index":
+                continue
+
             if rel_path_no_ext.endswith("/index"):
                 rel_path_no_ext = rel_path_no_ext[:-len("/index")]
 
