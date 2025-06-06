@@ -1,1 +1,2 @@
-python3 src/main.py "/tolkien/"
+#!/bin/bash
+python3 src/main.py "/tolkien"
